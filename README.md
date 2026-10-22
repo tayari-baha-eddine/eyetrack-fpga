@@ -8,7 +8,7 @@ Sur des images d'yeux issues du dataset Swirski, un MLP de 4 266 paramètres att
 
 ## Architecture du Pipeline
 
-```mermaid
+
 graph TD
     A[Image Originale 620x460] -->|Découpage ROI| B[ROI 400x400]
     B -->|Moyenne de blocs| C[Image 16x16]
@@ -19,6 +19,9 @@ graph TD
     G -->|Simulation| H[Testbench GHDL]
     F -->|Référence| I[Python forward_int]
     H <-->|Comparaison Bit-à-Bit| I
+
+    https://reports/figures/fig1_random.png
+
 ## Question de recherche
 Peut-on localiser la pupille avec un MLP de 4266 paramètres sur des images 16x16 ? Quel est le coût de la quantification INT8 ? Le VHDL peut-il reproduire exactement le modèle entier ?
 
