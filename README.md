@@ -17,7 +17,10 @@ Dataset [Swirski et al., 2012](https://www.cl.cam.ac.uk/research/rainbow/project
 MLP 256-16-8-2, ReLU. Poids INT8, activations 0..127, accumulateurs INT32. Requantification `(acc * M + 2^(S-1)) >> S`. Détails dans [docs/fixed_point.md](docs/fixed_point.md).
 
 ## Implémentation VHDL
-![Chronogramme GTKWave](reports/figures/waveform.png)Architecture séquentielle, 1 MAC par cycle. 4244 cycles simulés par inférence. Synthèse GHDL générant les ROMs de poids.
+Architecture séquentielle, 1 MAC par cycle. Le testbench mesure **4244 cycles** par inférence (comptés entre l'impulsion `start` et `done`). 
+*Note sur la latence :* À une fréquence hypothétique de 100 MHz, cela correspond à **42,44 µs**. C'est une conversion théorique, pas une mesure physique.
+
+*Note sur la synthèse :* `ghdl --synth` confirme que le design est synthétisable et infère les poids en ROM. Il s'agit d'une synthèse générique. Aucune synthèse cible (Vivado/Quartus), placement-routage ou mesure de ressources (LUT/BRAM) n'a été effectuée.
 
 ## Vérification
 Testbench VHDL vs modèle Python entier : **106 vecteurs synthétiques et 60 vecteurs réels**, **identiques bit-à-bit**. Le test de mutation manuel (modification d'un poids) échoue comme prévu, prouvant la sensibilité du testbench.
