@@ -19,8 +19,16 @@ architecture sim of tb_eye_mlp is
   signal done   : std_logic;
   signal pixels : act_array(0 to 255) := (others => (others => '0'));
   signal result : act_array(0 to 1);
+
+  -- Signaux d'observation pour GTKWave
+  signal obs_d1 : std_logic;
+  signal obs_d2 : std_logic;
 begin
   clk <= not clk after 5 ns;
+
+  -- On observe les signaux d1 et d2 à l'intérieur du DUT
+  obs_d1 <= << signal .tb_eye_mlp.dut.d1 : std_logic >>;
+  obs_d2 <= << signal .tb_eye_mlp.dut.d2 : std_logic >>;
 
   dut : entity work.eye_mlp_top
     port map (clk => clk, rst => rst, start => start, pixels => pixels, done => done, result => result);
