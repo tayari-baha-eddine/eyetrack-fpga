@@ -3,7 +3,19 @@
 Localisation de pupille par MLP quantifié : référence Python, modèle fixed-point, inférence VHDL vérifiée bit-à-bit.
 
 ## Aperçu
-Sur des images d'yeux issues du dataset Swirski, un MLP de 4 266 paramètres atteint une erreur moyenne de **4.06 px** sur une ROI de 400x400. Le modèle quantifié en INT8/INT32 atteint **5.17 px**. Le tout est accéléré en VHDL (4244 cycles par inférence) avec une exactitude bit-à-bit prouvée en simulation.
+## Architecture du Pipeline
+
+```mermaid
+graph TD
+    A[Image Originale 620x460] -->|Découpage ROI| B[ROI 400x400]
+    B -->|Moyenne de blocs| C[Image 16x16]
+    C -->|Entrée| D[MLP PyTorch]
+    D -->|Poids Float32| E[Entraînement & Évaluation]
+    E -->|Quantification INT8| F[Modèle Entier]
+    F -->|Export VHDL| G[eye_mlp_params.vhd]
+    G -->|Simulation| H[Testbench GHDL]
+    F -->|Référence| I[Python forward_int]
+    H <-->|Comparaison Bit-à-Bit| ISur des images d'yeux issues du dataset Swirski, un MLP de 4 266 paramètres atteint une erreur moyenne de **4.06 px** sur une ROI de 400x400. Le modèle quantifié en INT8/INT32 atteint **5.17 px**. Le tout est accéléré en VHDL (4244 cycles par inférence) avec une exactitude bit-à-bit prouvée en simulation.
 
 ![Exemples](reports/figures/fig1_random.png)
 
